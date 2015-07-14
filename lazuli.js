@@ -3,7 +3,6 @@
  * JS version
  */
 var Lazuli,
-  Lap,
   lazQuery,
   lazQ;
 
@@ -120,13 +119,23 @@ lazQ = function (table) {
   };
   this.find = function () {
     // run the query on the table and return the result
-    var defer = new lp();
+    var defer = new lp(),
+      xmlHttp = new XMLHttpRequest();
 
-    if (lapisReturn.err) {
-      return defer.reject(lapisReturn.err);
-    } else {
-      return defer.resolve(lapisReturn.res);
-    }
+    var requestItems = "technology=php";
+
+    xmlHttp.onreadystatechange = function () {
+      if (xmlHttp.readyState==4 && xmlHttp.status==200) {
+        defer.reject(xmlHttp.statusText);
+      } else {
+        defer.resolve(xmlHttp.responseText);
+      }
+    };
+
+    xmlHttp.open("GET", "http://lapis.tomi33.co.uk?" + requestItems, true);
+    xmlHttp.send(null);
+
+    return defer.promise;
   };
   this.arrange = function (by) {
     _this.order = by;
@@ -134,7 +143,8 @@ lazQ = function (table) {
   };
   this.byId = function (id) {
     // run the query on the table and return the result
-    var defer = new lp();
+    var defer = new lp(),
+      xml;
 
     if (lapisReturn.err) {
       return defer.reject(lapisReturn.err);
@@ -164,4 +174,4 @@ Lazuli.prototype.Object = function (table) {
 
 
 
-if (typeof module !== undefined) module.exports = Lazuli;
+// if (typeof module !== undefined) module.exports = Lazuli;
