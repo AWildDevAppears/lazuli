@@ -146,11 +146,18 @@ lazQ = function (table) {
     var defer = new lp(),
       xml;
 
-    if (lapisReturn.err) {
-      return defer.reject(lapisReturn.err);
-    } else {
-      return defer.resolve(lapisReturn.res);
-    }
+    xmlHttp.onreadystatechange = function () {
+      if (xmlHttp.readyState==4 && xmlHttp.status==200) {
+        defer.reject(xmlHttp.statusText);
+      } else {
+        defer.resolve(xmlHttp.responseText);
+      }
+    };
+
+    xmlHttp.open("GET", "http://lapis.tomi33.co.uk?id=" + id, true);
+    xmlHttp.send(null);
+
+    return defer.promise;
   };
 };
 
