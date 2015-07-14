@@ -181,4 +181,4 @@ Lazuli.prototype.Object = function (table) {
 
 
 
-// if (typeof module !== undefined) module.exports = Lazuli;
+if (typeof module !== "undefined") module.exports = Lazuli;
