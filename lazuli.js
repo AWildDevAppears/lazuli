@@ -2,7 +2,7 @@
  * Lazuli for LAPIS
  * JS version
  */
-Lazuli = (function () {
+var Lazuli = (function () {
   var Lazuli,
   lazQuery,
   lazQ;
