@@ -107,7 +107,11 @@ var Lazuli = (function () {
     END LU Promise
   */
 
-  Lazuli = function () {};
+  Lazuli = function (options) {
+    if (typeof options === "object") {
+      if (options.backendUrl) this.backendUrl = options.backendUrl;
+    }
+  };
 
   lazQ = function (table) {
     var _this = this;
@@ -116,9 +120,8 @@ var Lazuli = (function () {
     _this.findWhere = "";
 
     this.where = function (searchCriteria) {
-      // TODO: make the search criteria readable by lapis
       for (var k in searchCriteria) {
-        if (searchCriteria.hasOwnProperty(k)) {
+        if (searchCriteria.hasOwnProperty(k) && k !== "id") {
           if (searchCriteria[k].equals) {
             _this.findWhere += k + "=" + searchCriteria[k].equals + "&";
           }
@@ -126,6 +129,7 @@ var Lazuli = (function () {
       }
       return _this;
     };
+
     this.find = function () {
       // run the query on the table and return the result
       var defer = new lp(),
@@ -140,13 +144,13 @@ var Lazuli = (function () {
         }
       };
 
-      xmlHttp.open("GET", "http://lapis.tomi33.co.uk/GET/?" + _this.findWhere, true);
+      xmlHttp.open("GET", (_this.backendUrl + "/GET/?") || "http://lapis.tomi33.co.uk/GET/?" + _this.findWhere, true);
       xmlHttp.send(null);
 
       return defer.promise;
     };
     this.arrange = function (by) {
-      _this.order = by;
+      _this.findWhere += "%order:"+ by +"%";
       return _this;
     };
     this.byId = function (id) {
@@ -155,14 +159,14 @@ var Lazuli = (function () {
         xml;
 
       xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState==4 && xmlHttp.status==200) {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
           defer.reject(xmlHttp.statusText);
         } else {
           defer.resolve(xmlHttp.responseText);
         }
       };
 
-      xmlHttp.open("GET", "http://lapis.tomi33.co.uk/GET/?id=" + id, true);
+      xmlHttp.open("GET", (_this.backendUrl + "/GET/?id=")  || "http://lapis.tomi33.co.uk/GET/?id=" + id, true);
       xmlHttp.send(null);
 
       return defer.promise;

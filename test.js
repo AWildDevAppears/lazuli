@@ -1,20 +1,18 @@
 var lazuli  = require("lazuli.js");
 
-new (lazuli.query("row"))
-  .where({
-    "x": {equals: "a"},
-    "y": {notEqual: "6"}
+new (lazuli.query("row"))   // Y
+  .where({                  // Y
+    "x": {equals: "a"},     // Y
+    "y": {notEqual: "6"}    // N
   })
-  .arrange("asc")
-  .find()
-  .then(function (res) {
+  .arrange("asc")           // N
+  .find()                   // Y
+  .then(function (res) {    // Y
     console.log(res);
   }, function (err) {
     console.log(err);
   });
 
 
-var x = new lazuli.Object("row");
-
-
-x.write({x: "y"});
+var x = new lazuli.Object("row");  // N
+x.write({x: "y"});                 // N
