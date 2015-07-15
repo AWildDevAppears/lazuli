@@ -111,13 +111,13 @@ var Lazuli = (function () {
     if (typeof options === "object") {
       if (options.backendUrl) this.backendUrl = options.backendUrl;
     }
+    this.promise = lp;
   };
 
   lazQ = function (table) {
     var _this = this;
     this.table = table;
-
-    _this.findWhere = "";
+    this.findWhere = "";
 
     this.where = function (searchCriteria) {
       for (var k in searchCriteria) {
