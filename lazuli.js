@@ -113,9 +113,17 @@ var Lazuli = (function () {
     var _this = this;
     this.table = table;
 
+    _this.findWhere = "";
+
     this.where = function (searchCriteria) {
       // TODO: make the search criteria readable by lapis
-      _this.findWhere = searchCriteria;
+      for (var k in searchCriteria) {
+        if (searchCriteria.hasOwnProperty(k)) {
+          if (searchCriteria[k].equals) {
+            _this.findWhere += k + "=" + searchCriteria[k].equals + "&";
+          }
+        }
+      }
       return _this;
     };
     this.find = function () {
@@ -123,17 +131,16 @@ var Lazuli = (function () {
       var defer = new lp(),
         xmlHttp = new XMLHttpRequest();
 
-      var requestItems = "technology=php";
 
       xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState==4 && xmlHttp.status==200) {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
           defer.reject(xmlHttp.statusText);
         } else {
           defer.resolve(xmlHttp.responseText);
         }
       };
 
-      xmlHttp.open("GET", "http://lapis.tomi33.co.uk?" + requestItems, true);
+      xmlHttp.open("GET", "http://lapis.tomi33.co.uk/GET/?" + _this.findWhere, true);
       xmlHttp.send(null);
 
       return defer.promise;
@@ -155,7 +162,7 @@ var Lazuli = (function () {
         }
       };
 
-      xmlHttp.open("GET", "http://lapis.tomi33.co.uk?id=" + id, true);
+      xmlHttp.open("GET", "http://lapis.tomi33.co.uk/GET/?id=" + id, true);
       xmlHttp.send(null);
 
       return defer.promise;
