@@ -149,8 +149,13 @@ var Lazuli = (function () {
 
       return defer.promise;
     };
-    this.arrange = function (by) {
-      _this.findWhere += "%order:"+ by +"%";
+
+    this.limit = function(val) {
+        _this.findWhere += "LIMIT=" + val + "&";
+    };
+
+    this.arrange = function (by, order) {
+      _this.findWhere += "ORDER_BY="+ by +"&ORDER=" + order.toUpperCase() + "&";
       return _this;
     };
     this.byId = function (id) {
