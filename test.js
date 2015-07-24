@@ -1,6 +1,6 @@
 var lazuli  = require("lazuli.js");
 
-new (lazuli.query("row"))   // Y
+new (lazuli.query("table"))   // Y
   .where({                  // Y
     "x": {equals: "a"},     // Y
     "y": {notEqual: "6"}    // N
@@ -14,5 +14,12 @@ new (lazuli.query("row"))   // Y
   });
 
 
-var x = new lazuli.Object("row");  // N
+var x = new lazuli.Object("row");  // Y
 x.write({x: "y"});                 // N
+
+
+
+laz = new Lazuli()
+x = new laz.Object()
+
+x.write({"author_id": 3339, "technology": "paper", "description": "hello", "code": "foo"})

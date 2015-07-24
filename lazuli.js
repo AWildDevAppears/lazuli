@@ -115,6 +115,7 @@ var Lazuli = (function () {
     var _this = this;
     this.table = table;
     this.findWhere = "";
+    this.strict = "STRICT="
 
     console.log(this.backendUrl);
 
@@ -158,7 +159,7 @@ var Lazuli = (function () {
 
       };
 
-      xmlHttp.open("GET", "https://lapis.tomi33.co.uk/GET/?" + _this.findWhere, true);
+      xmlHttp.open("GET", "https://lapis.tomi33.co.uk"+ _this.table +"/GET/?" + _this.findWhere + "&" + _this.strict /*+ "&CONTENT_TYPE=" + _this.table*/, true);
       xmlHttp.send(null);
 
       return defer.promise;
@@ -198,7 +199,7 @@ var Lazuli = (function () {
           }
         };
 
-      xmlHttp.open("GET", "https://lapis.tomi33.co.uk/GET/?id=" + id, true);
+      xmlHttp.open("GET", "https://lapis.tomi33.co.uk/GET/?id=" + id + /*"&CONTENT_TYPE=" + _this.table*/, true);
       xmlHttp.send(null);
 
       return defer.promise;
@@ -215,7 +216,27 @@ var Lazuli = (function () {
     this.type = table;
 
     this.write = function (values) {
-      // put this data onto the server
+      var xmlhttp,
+        request = "";
+
+      for (var k in values) {
+        request += k + "=" + values[k] + "&";
+        _this.attr[k] = values[k];
+      }
+
+      if (window.XMLHttpRequest){
+        xmlhttp=new XMLHttpRequest();
+      } else {
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+
+      // Making the request
+      xmlhttp=new XMLHttpRequest();
+      xmlhttp.open("POST","https://lapis.tomi33.co.uk/POST/",true);
+      xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      xmlhttp.send(request);
+
+      return _this;
     };
 
     this.read = function (value) {
