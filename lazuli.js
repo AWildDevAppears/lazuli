@@ -108,9 +108,6 @@ var Lazuli = (function () {
   */
 
   Lazuli = function (options) {
-    if (typeof options === "object") {
-      if (options.backendUrl) this.backendUrl = options.backendUrl;
-    }
     this.promise = lp;
   };
 
@@ -119,11 +116,16 @@ var Lazuli = (function () {
     this.table = table;
     this.findWhere = "";
 
+    console.log(this.backendUrl);
+
     this.where = function (searchCriteria) {
       for (var k in searchCriteria) {
         if (searchCriteria.hasOwnProperty(k) && k !== "id") {
           if (searchCriteria[k].equals) {
             _this.findWhere += k + "=" + searchCriteria[k].equals + "&";
+            _this.strict += k + ",";
+          } else if (searchCriteria[k].contains) {
+            _this.findWhere += k + "=" + searchCriteria[k].contains + "&";
           }
         }
       }
@@ -135,16 +137,28 @@ var Lazuli = (function () {
       var defer = new lp(),
         xmlHttp = new XMLHttpRequest();
 
-
       xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-          defer.reject(xmlHttp.statusText);
-        } else {
-          defer.resolve(xmlHttp.responseText);
+        if (xmlHttp.readyState == 4) {
+          if (xmlHttp.status == 200) {
+            console.log("success");
+            console.log(xmlHttp.status);
+            defer.resolve(xmlHttp.responseText);
+          } else if (xmlHttp.status == 301) {
+            // sit and wait for redirect bounce
+          } else {
+            console.log("fail");
+            console.log(xmlHttp.status);
+            if (xmlHttp.responseText) {
+              defer.reject(xmlHttp.responseText);
+            } else {
+              defer.reject(xmlHttp.statusText);
+            }
+          }
         }
+
       };
 
-      xmlHttp.open("GET", (_this.backendUrl + "/GET/?") || "http://lapis.tomi33.co.uk/GET/?" + _this.findWhere, true);
+      xmlHttp.open("GET", "https://lapis.tomi33.co.uk/GET/?" + _this.findWhere, true);
       xmlHttp.send(null);
 
       return defer.promise;
@@ -152,6 +166,7 @@ var Lazuli = (function () {
 
     this.limit = function(val) {
         _this.findWhere += "LIMIT=" + val + "&";
+        return _this;
     };
 
     this.arrange = function (by, order) {
@@ -163,15 +178,27 @@ var Lazuli = (function () {
       var defer = new lp(),
         xml;
 
-      xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-          defer.reject(xmlHttp.statusText);
-        } else {
-          defer.resolve(xmlHttp.responseText);
-        }
-      };
+        xmlHttp.onreadystatechange = function () {
+          if (xmlHttp.readyState == 4) {
+            if (xmlHttp.status == 200) {
+              console.log("success");
+              console.log(xmlHttp.status);
+              defer.resolve(xmlHttp.responseText);
+            } else if (xmlHttp.status == 301) {
+              // sit and wait for redirect bounce
+            } else {
+              console.log("fail");
+              console.log(xmlHttp.status);
+              if (xmlHttp.responseText) {
+                defer.reject(xmlHttp.responseText);
+              } else {
+                defer.reject(xmlHttp.statusText);
+              }
+            }
+          }
+        };
 
-      xmlHttp.open("GET", (_this.backendUrl + "/GET/?id=")  || "http://lapis.tomi33.co.uk/GET/?id=" + id, true);
+      xmlHttp.open("GET", "https://lapis.tomi33.co.uk/GET/?id=" + id, true);
       xmlHttp.send(null);
 
       return defer.promise;
