@@ -109,15 +109,23 @@ var Lazuli = (function () {
 
   Lazuli = function (options) {
     this.promise = lp;
+    this.query = function (table) {
+      return new lazQ(options, table);
+    };
   };
 
-  lazQ = function (table) {
-    var _this = this;
+  lazQ = function (options, table) {
+    var _lqThis = this;
+
+    if (options) {
+      for (var k in options) {
+        this[k] = options[k];
+      }
+    }
     this.table = table;
     this.findWhere = "";
-    this.strict = "STRICT="
-
-    console.log(this.backendUrl);
+    this.strict = "STRICT=";
+    this.domainPath =(_this.ssl ? "https://" : "http://") + _this.url;
 
     this.where = function (searchCriteria) {
       for (var k in searchCriteria) {
@@ -159,19 +167,19 @@ var Lazuli = (function () {
 
       };
 
-      xmlHttp.open("GET", "https://lapis.tomi33.co.uk"+ _this.table +"/GET/?" + _this.findWhere + "&" + _this.strict /*+ "&CONTENT_TYPE=" + _this.table*/, true);
+      xmlHttp.open("GET", _this.domainPath + "/" + _lqThis.table +"/GET/?" + _lqThis.findWhere + "&" + _lqThis.strict /*+ "&CONTENT_TYPE=" + _lqThis.table*/, true);
       xmlHttp.send(null);
 
       return defer.promise;
     };
 
     this.limit = function(val) {
-        _this.findWhere += "LIMIT=" + val + "&";
+        _lqThis.findWhere += "LIMIT=" + val + "&";
         return _this;
     };
 
     this.arrange = function (by, order) {
-      _this.findWhere += "ORDER_BY="+ by +"&ORDER=" + order.toUpperCase() + "&";
+      _lqThis.findWhere += "ORDER_BY="+ by +"&ORDER=" + order.toUpperCase() + "&";
       return _this;
     };
     this.byId = function (id) {
@@ -199,15 +207,11 @@ var Lazuli = (function () {
           }
         };
 
-      xmlHttp.open("GET", "https://lapis.tomi33.co.uk/GET/?id=" + id + /*"&CONTENT_TYPE=" + _this.table*/, true);
+      xmlHttp.open("GET", _this.domainPath + "/GET/?id=" + id /*+ "&CONTENT_TYPE=" + _lqThis.table*/, true);
       xmlHttp.send(null);
 
       return defer.promise;
     };
-  };
-
-  Lazuli.prototype.query = function (table) {
-    return new lazQ(table);
   };
 
   Lazuli.prototype.Object = function (table) {
