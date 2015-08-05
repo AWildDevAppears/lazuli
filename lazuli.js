@@ -115,7 +115,7 @@ var Lazuli = (function () {
   };
 
   lazQ = function (options, table) {
-    var _lqThis = this;
+    var _this = this;
 
     if (options) {
       for (var k in options) {
@@ -167,19 +167,19 @@ var Lazuli = (function () {
 
       };
 
-      xmlHttp.open("GET", _this.domainPath + "/" + _lqThis.table +"/GET/?" + _lqThis.findWhere + "&" + _lqThis.strict /*+ "&CONTENT_TYPE=" + _lqThis.table*/, true);
+      xmlHttp.open("GET", _this.domainPath /*+ "/" + _this.table*/ + "/GET/?" + _this.findWhere + "&" + _this.strict /*+ "&CONTENT_TYPE=" + _this.table*/, true);
       xmlHttp.send(null);
 
       return defer.promise;
     };
 
     this.limit = function(val) {
-        _lqThis.findWhere += "LIMIT=" + val + "&";
+        _this.findWhere += "LIMIT=" + val + "&";
         return _this;
     };
 
     this.arrange = function (by, order) {
-      _lqThis.findWhere += "ORDER_BY="+ by +"&ORDER=" + order.toUpperCase() + "&";
+      _this.findWhere += "ORDER_BY="+ by +"&ORDER=" + order.toUpperCase() + "&";
       return _this;
     };
     this.byId = function (id) {
@@ -207,7 +207,7 @@ var Lazuli = (function () {
           }
         };
 
-      xmlHttp.open("GET", _this.domainPath + "/GET/?id=" + id /*+ "&CONTENT_TYPE=" + _lqThis.table*/, true);
+      xmlHttp.open("GET", _this.domainPath + "/GET/?id=" + id /*+ "&CONTENT_TYPE=" + _this.table*/, true);
       xmlHttp.send(null);
 
       return defer.promise;
