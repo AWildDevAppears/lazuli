@@ -167,7 +167,7 @@ var Lazuli = (function () {
 
       };
 
-      xmlHttp.open("GET", _this.domainPath /*+ "/" + _this.table*/ + "/GET/?" + _this.findWhere + "&" + _this.strict /*+ "&CONTENT_TYPE=" + _this.table*/, true);
+      xmlHttp.open("GET", _this.domainPath + "/GET/?" + _this.findWhere + "&" + _this.strict + "&CONTENT_TYPE=" + _this.table, true);
       xmlHttp.send(null);
 
       return defer.promise;
@@ -207,7 +207,7 @@ var Lazuli = (function () {
           }
         };
 
-      xmlHttp.open("GET", _this.domainPath + "/GET/?id=" + id /*+ "&CONTENT_TYPE=" + _this.table*/, true);
+      xmlHttp.open("GET", _this.domainPath + "/GET/?id=" + id + "&CONTENT_TYPE=" + _this.table, true);
       xmlHttp.send(null);
 
       return defer.promise;
