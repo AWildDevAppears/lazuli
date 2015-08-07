@@ -185,7 +185,7 @@ var Lazuli = (function () {
     this.byId = function (id) {
       // run the query on the table and return the result
       var defer = new lp(),
-        xml;
+        xmlHttp = new XMLHttpRequest();
 
         xmlHttp.onreadystatechange = function () {
           if (xmlHttp.readyState == 4) {
